@@ -7,6 +7,7 @@ volumes:
 services:
   filebrowser:
     image: hurlenko/filebrowser
+    container_name: filebrowser
     user: "${PUID}:${PGID}"
     ports:
       - 8080:80
@@ -19,6 +20,7 @@ services:
     
   gotify:
     image: gotify/server
+    container_name: gotify
     ports:
       - 5454:80
     environment:
@@ -48,6 +50,7 @@ services:
 
   navidrome:
     image: deluan/navidrome:latest
+    container_name: navidrome
     user: 1000:1000 # should be owner of volumes
     ports:
       - 4533:4533
@@ -85,6 +88,7 @@ services:
 
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
     restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
@@ -119,7 +123,7 @@ services:
       - ${APPDATA}/organizr:/config
     ports:
       - 100:80
-    restart: unless-stopped---
+    restart: unless-stopped
 
   overseerr:
     image: sctx/overseerr:latest
@@ -131,7 +135,7 @@ services:
       - 5055:5055
     volumes:
       - ${APPDATA}/overseer:/app/config
-    restart: unless-stopped---
+    restart: unless-stopped
 
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
@@ -297,6 +301,7 @@ services:
 
   watchtower:
     image: containrrr/watchtower
+    container_name: watchtower
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
    # Check for updates every couple hours: (3h * 60m * 60s)
