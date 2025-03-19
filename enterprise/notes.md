@@ -4,6 +4,7 @@
 - [ ] Document current server setup (see notes below)
 - [ ] Upload docker-compose files
 - [ ] Roadmap for future plans/ideas
+- [ ] Set up a way to commit/pull from GitHub
 
 # Notes
 ## Current setup To-Do
