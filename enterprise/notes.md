@@ -11,6 +11,7 @@
 - [ ] Document file/folder structure
 - [ ] Make a list of all packages to add to a fresh setup
 - [ ] Document OMV config for replication
+- [ ] Clean up Portainer (stacks, networks, & volumes)
 
 ## Issues (add to issues?)
 - [ ] Restore wireguard config (originally stored in docker volume) - maybe use bind mount instead?
