@@ -238,7 +238,7 @@ services:
       - ${DATA}/Music:/data
     environment:
       - PLEX_URL=10.0.0.10:32400
-      - PLEX_TOKEN=cy9Hseb-_mYwzsuSDvB6
+      - PLEX_TOKEN=LTycXhyVA41QrWWhcMp_
       - WRITE_MISSING_AS_CSV=1 # Default 0, 1 = writes missing tracks from each playlist to a csv
       - APPEND_SERVICE_SUFFIX=0 # Default 1, 1 = appends the service name to the playlist name
       - ADD_PLAYLIST_POSTER=1 # Default 1, 1 = add poster for each playlist
