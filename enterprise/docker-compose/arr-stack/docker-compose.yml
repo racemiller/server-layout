@@ -260,22 +260,5 @@
       - ${APPDATA}/sonarr-youtubedl/logs:/logs
     restart: unless-stopped
 
-  watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    networks:
-      - arr-stack
-    environment:
-      - TZ=${TZ}
-      - WATCHTOWER_CLEANUP=True
-      - WATCHTOWER_NOTIFICATIONS=gotify
-      - WATCHTOWER_NOTIFICATION_GOTIFY_URL=http://10.0.0.2:5454
-      - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
-      - WATCHTOWER_LABEL_ENABLE=False
-    # - WATCHTOWER_DISABLE_CONTAINERS=
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
-
  networks:
   arr-stack:

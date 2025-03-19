@@ -12,6 +12,11 @@
 - [ ] Make a list of all packages to add to a fresh setup
 - [ ] Document OMV config for replication
 
+## Issues (add to issues?)
+- [ ] Restore wireguard config (originally stored in docker volume) - maybe use bind mount instead?
+- [ ] Filebrowser isn't accessible
+- [ ] HA isn't accessible from reverse proxy
+
 ## Enterprise Brain Dump
 Right now I'm running OMV as the main OS, and this server is acting as a NAS as well as hosting almost all my Docker conatiners.  
 In the future, I would like this machine to just be a NAS, and move everything Docker to another machine running Proxmox.  
