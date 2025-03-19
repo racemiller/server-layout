@@ -1,0 +1,71 @@
+services:
+  transmission-openvpn:
+        container_name: transmission
+        cap_add:
+            - NET_ADMIN
+        volumes:
+            - ${DOWNLOADS}/Torrents:/data
+            - ${APPDATA}/transmission:/config
+        environment:
+            - CREATE_TUN_DEVICE=true
+            - DROP_DEFAULT_ROUTE=
+            - ENABLE_UFW=false
+            - GLOBAL_APPLY_PERMISSIONS=true
+            - HEALTH_CHECK_HOST=google.com
+            - LOCAL_NETWORK=10.0.0.0/16
+            - LOG_TO_STDOUT=false
+            - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
+            - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
+            - OPENVPN_PROVIDER=NORDVPN
+            - OPENVPN_USERNAME=ANjcTRAkd2sx5tRbssYzFcuH
+            - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            - PEER_DNS=true
+            - PEER_DNS_PIN_ROUTES=true
+            - PGID=${PGID}
+            - PUID=${PUID}
+            - REVISION=07f5a2b9aea5028c9bb75438c1552708e91dde71
+            - SELFHEAL=false
+            - TRANSMISSION_DOWNLOAD_DIR=/data/completed
+            - TRANSMISSION_DOWNLOAD_LIMIT=5000
+            - TRANSMISSION_DOWNLOAD_LIMIT_ENABLED=1
+            - TRANSMISSION_DOWNLOAD_QUEUE_SIZE=10
+            - TRANSMISSION_HOME=/config/transmission-home
+            - TRANSMISSION_IDLE_SEEDING_LIMIT=10
+            - TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED=true
+            - TRANSMISSION_INCOMPLETE_DIR=/data/incomplete
+            - TRANSMISSION_QUEUE_STALLED_MINUTES=10
+            - TRANSMISSION_RATIO_LIMIT=1
+            - TRANSMISSION_RATIO_LIMIT_ENABLED=true
+            - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
+            - TRANSMISSION_RPC_PASSWORD=7508216
+            - TRANSMISSION_RPC_PORT=9091
+            - TRANSMISSION_RPC_USERNAME=racemiller
+            - TRANSMISSION_WATCH_DIR=/data/watch
+            - TRANSMISSION_WEB_UI=flood-for-transmission
+            - TZ=${TZ}
+            - UFW_ALLOW_GW_NET=false
+            - UFW_DISABLE_IPTABLES_REJECT=false
+            - UFW_EXTRA_PORTS=
+            - WEBPROXY_ENABLED=false
+            - WEBPROXY_PASSWORD=
+            - WEBPROXY_PORT=8118
+            - WEBPROXY_USERNAME=
+        logging:
+            driver: json-file
+            options:
+                max-size: 10m
+        ports:
+            - 9091:9091
+        image: haugene/transmission-openvpn
+        restart: unless-stopped
+
+  jdownloader-2:
+    image: jlesage/jdownloader-2
+    container_name: jdownloader
+    ports:
+      - 5800:5800
+      - 3129:3129
+    volumes:
+      - ${APPDATA}/jdownloader:/config:rw
+      - ${DOWNLOADS}/Jdownloader:/output:rw
+    restart: unless-stopped

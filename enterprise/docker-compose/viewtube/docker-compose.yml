@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  viewtube:
+    restart: unless-stopped
+    # Or use mauriceo/viewtube:dev for the development version
+    image: mauriceo/viewtube:latest
+    # ViewTube will not start until the database and redis are ready
+    depends_on:
+      - viewtube-mongodb
+      - viewtube-redis
+    # Make sure all services are in the same network
+    networks:
+      - viewtube
+    volumes:
+      # This will map ViewTube's data directory to the local folder ./data/viewtube/
+      - /srv/dev-disk-by-uuid-e3b35892-f917-465b-baa7-93962772ed9f/AppData/viewtube:/data
+    environment:
+      - VIEWTUBE_DATABASE_HOST=viewtube-mongodb
+      - VIEWTUBE_REDIS_HOST=viewtube-redis
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - 8066:8066
+
+  viewtube-mongodb:
+    restart: unless-stopped
+    image: mongo:7
+    networks:
+      - viewtube
+    volumes:
+      - /srv/dev-disk-by-uuid-e3b35892-f917-465b-baa7-93962772ed9f/AppData/viewtube/db:/data/db
+    environment:  
+      - PUID=1000
+      - PGID=1000
+
+  viewtube-redis:
+    restart: unless-stopped
+    image: redis:7
+    networks:
+      - viewtube
+    volumes:
+      - /srv/dev-disk-by-uuid-e3b35892-f917-465b-baa7-93962772ed9f/AppData/viewtube/redis:/data
+    environment:  
+      - PUID=1000
+      - PGID=1000
+
+networks:
+  viewtube:
+

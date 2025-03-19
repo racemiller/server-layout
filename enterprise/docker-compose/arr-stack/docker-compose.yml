@@ -1,0 +1,266 @@
+ services:
+  lidarr:
+    container_name: lidarr
+    image: linuxserver/lidarr:latest
+    networks:
+      - arr-stack
+    ports:
+      - 8686:8686/tcp
+    restart: unless-stopped
+    volumes:
+      - ${RECYCLE}:/recycle
+      - ${DATA}/Music/Regular Music:/music
+      - ${DOWNLOADS}/completed/music:/data/completed/music
+      - ${DOWNLOADS}/../Soulseek:/soulseek
+      - ${APPDATA}/lidarr:/config
+      - ${APPDATA}/lidarr/custom-services.d:/custom-services.d
+      - ${APPDATA}/lidarr/custom-cont-init.d:/custom-cont-init.d
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+  xmas-lidarr:
+    container_name: xmas-lidarr
+    image: linuxserver/lidarr:latest
+    networks:
+      - arr-stack
+    ports:
+      - 8585:8686/tcp
+    restart: unless-stopped
+    volumes:
+      - ${RECYCLE}:/recycle
+      - ${DATA}/Music/Christmas Music:/music
+      - ${DOWNLOADS}/completed/music:/data/completed/music
+      - ${APPDATA}/xmaslidarr:/config
+      - ${APPDATA}/lidarr/custom-services.d:/custom-services.d
+      - ${APPDATA}/lidarr/custom-cont-init.d:/custom-cont-init.d
+      - ${DOWNLOADS}/../Soulseek:/soulseek
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
+    networks:
+      - arr-stack
+    ports:
+      - 7878:7878/tcp
+    restart: unless-stopped
+    volumes:
+      - ${RECYCLE}:/recycle
+      - ${DATA}/Movies:/movies
+      - ${DATA}/Other Movies:/other
+      - ${DOWNLOADS}/completed/other:/downloads
+      - ${APPDATA}/radarr:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+  radarr4k:
+    container_name: radarr4k
+    image: lscr.io/linuxserver/radarr:latest
+    networks:
+      - arr-stack
+    ports:
+      - 4444:7878/tcp
+    restart: unless-stopped
+    volumes:
+      - ${RECYCLE}:/recycle
+      - ${DATA}/4K Movies:/movies
+      - ${DOWNLOADS}/completed/4K:/downloads
+      - ${APPDATA}/radarr4k:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr:latest
+    networks:
+      - arr-stack
+    ports:
+      - 8989:8989/tcp
+    restart: unless-stopped
+    volumes:
+      - ${RECYCLE}:/recycle
+      - ${DATA}/TV Shows:/tv
+      - ${DATA}/Cartoons:/cartoons
+      - ${DOWNLOADS}/completed/other:/downloads
+      - ${APPDATA}/sonarr:/config
+      - ${APPDATA}/sonarr/custom-services.d:/custom-services.d
+      - ${APPDATA}/sonarr/custom-cont-init.d:/custom-cont-init.d
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+  sonarr4k:
+    container_name: sonarr4k
+    image: linuxserver/sonarr:latest
+    networks:
+      - arr-stack
+    ports:
+      - 8484:8989/tcp
+    restart: unless-stopped
+    volumes:
+      - ${RECYCLE}:/recycle
+      - ${DATA}/4K Shows:/tv
+      - ${DATA}/4K Cartoons:/cartoons
+      - ${DOWNLOADS}/completed/4K:/downloads
+      - ${APPDATA}/sonarr4k:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    networks: 
+      - arr-stack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/readarr:/config
+      - ${DATA}/eBooks:/books
+      - ${DOWNLOADS}/completed/books:/downloads
+      - ${RECYCLE}:/recycle
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+    
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    networks:
+      - arr-stack
+    ports:
+      - 13378:80
+    volumes:
+      - ${DATA}/eBooks:/audiobooks
+      - ${APPDATA}/audiobookshelf/config:/config
+      - ${APPDATA}/audiobookshelf/metadata:/metadata
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    networks:
+      - arr-stack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    networks:
+      - arr-stack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DATA}/Cartoons:/cartoons
+      - ${DATA}/Movies:/movies
+      - ${DATA}/TV Shows:/tv
+      - ${APPDATA}/bazarr:/config
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  slskd:
+    image: slskd/slskd
+    container_name: slskd
+    networks:
+      - arr-stack
+    ports:
+      - 5030:5030
+      - 5031:5031
+      - 50300:50300
+    environment:
+      - SLSKD_REMOTE_CONFIGURATION=true
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/slskd:/app
+      - ${DOWNLOADS}/../Soulseek:/app/downloads
+      - ${DATA}/Music/Regular Music:/music
+    restart: unless-stopped
+
+  soularr:
+    image: mrusse08/soularr:latest
+    container_name: soularr
+    networks:
+      - arr-stack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SCRIPT_INTERVAL=300
+    user: ${PUID}:${PGID}
+    volumes:
+      - ${DOWNLOADS}/../Soulseek:/downloads
+      - ${APPDATA}/soularr:/data
+    restart: unless-stopped
+
+  xmas-soularr:
+    image: mrusse08/soularr:latest
+    container_name: xmas-soularr
+    networks:
+      - arr-stack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SCRIPT_INTERVAL=300
+    user: ${PUID}:${PGID}
+    volumes:
+      - ${DOWNLOADS}/../Soulseek:/downloads
+      - ${APPDATA}/xmas-soularr:/data
+    restart: unless-stopped
+
+  sonarr_youtubedl:
+    image: whatdaybob/sonarr_youtubedl
+    container_name: sonarr-youtubedl
+    networks:
+     - arr-stack
+    volumes:
+      - ${APPDATA}/sonarr-youtubedl:/config
+      - ${DATA}:/sonarr_root
+      - ${APPDATA}/sonarr-youtubedl/logs:/logs
+    restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    networks:
+      - arr-stack
+    environment:
+      - TZ=${TZ}
+      - WATCHTOWER_CLEANUP=True
+      - WATCHTOWER_NOTIFICATIONS=gotify
+      - WATCHTOWER_NOTIFICATION_GOTIFY_URL=http://10.0.0.2:5454
+      - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
+      - WATCHTOWER_LABEL_ENABLE=False
+    # - WATCHTOWER_DISABLE_CONTAINERS=
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+ networks:
+  arr-stack:
