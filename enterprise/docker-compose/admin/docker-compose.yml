@@ -41,7 +41,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${APPDATA}:/config
+      - ${APPDATA}/home-assistant:/config
     ports:
       - 8123:8123 #optional
    #devices:
