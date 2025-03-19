@@ -1,3 +1,9 @@
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
+  etc_wireguard:
+
 services:
   filebrowser:
     image: hurlenko/filebrowser
@@ -19,7 +25,7 @@ services:
       - GOTIFY_DEFAULTUSER_PASS=admin
       - TZ=${TZ}
     volumes:
-      - ${APPDATA/gotify}:/app/data
+      - ${APPDATA}/gotify:/app/data
     # to run gotify as a dedicated user:
     # sudo chown -R 1234:1234 ./gotify_data
     # user: "1234:1234"
@@ -36,7 +42,7 @@ services:
       - ${APPDATA}:/config
     ports:
       - 8123:8123 #optional
-    devices:
+   #devices:
     # - /path/to/device:/path/to/device #optional
     restart: unless-stopped
 
@@ -76,12 +82,6 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
-
-  volumes:
-    netdataconfig:
-    netdatalib:
-    netdatacache:
-    etc_wireguard:
 
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
