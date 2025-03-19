@@ -77,10 +77,11 @@ services:
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
 
-volumes:
-  netdataconfig:
-  netdatalib:
-  netdatacache:
+  volumes:
+    netdataconfig:
+    netdatalib:
+    netdatacache:
+    etc_wireguard:
 
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -145,14 +146,14 @@ volumes:
       - 8181:8181
     restart: unless-stopped
 
-    wrapperr:
-        ports:
-            - 8282:8282
-        container_name: wrapperr
-        image: ghcr.io/aunefyren/wrapperr:latest
-        restart: unless-stopped
-        volumes:
-            - ${APPDATA}/wrapper:/app/config
+  wrapperr:
+    ports:
+      - 8282:8282
+    container_name: wrapperr
+    image: ghcr.io/aunefyren/wrapperr:latest
+    restart: unless-stopped
+    volumes:
+      - ${APPDATA}/wrapper:/app/config
 
   flaresolverr:
     # DockerHub mirror flaresolverr/flaresolverr:latest
@@ -246,91 +247,65 @@ volumes:
       - DEEZER_USER_ID=<your spotify user id>
       - DEEZER_PLAYLIST_ID= #<deezer playlist ids space seperated>
     restart: unless-stopped
-  
-  photostructure:
-    # You can run alpha, beta, or stable builds. See
-    # <https://forum.photostructure.com/t/274> for details.
-    image: photostructure/server:stable
-    container_name: photostructure
-    restart: unless-stopped
-    stop_grace_period: 2m
 
-    volumes:
-      # This is where your PhotoStructure Library will be stored.
-      # It must be readable, writable, and have sufficient free space.
-      # If it is a remote volume, uncomment the PS_FORCE_LOCAL_DB_REPLICA
-      # environment line below.
-
-      - type: bind
-        source: ${DATA}/Pictures # < CHANGE THIS LINE
-        target: /ps/library
-
-      # This must be fast, local disk with many gigabytes free.
-      # PhotoStructure will use this directory for file caching
-      # and for storing a temporary database replica when your
-      # library is on a remote volume.
-
-      - type: bind
-        source: ${APPDATA}/photostructure/tmp
-        target: /ps/tmp
-
-      # This directory stores your "system settings"
-
-      - type: bind
-        source: ${APPDATA}/photostructure/config
-        target: /ps/config
-
-      # This directory stores PhotoStructure logfiles.
-
-      - type: bind
-        source: ${APPDATA}/photostructure/logs
-        target: /ps/logs
-
-      # Example additional directories to import into your library.
-      # Add as many as you'd like, or remove one or both of these examples.
-
-      # Set the target to /media/... or /mnt/...
-      # (the name doesn't matter, as long as it is unique)
-
-
-      # Here's another example directory to scan:
-      # - type: bind
-      #   source: /home/jamie/Pictures
-      #   target: /var/home-jamie-pictures
-
-    ports:
-      - 1787:1787/tcp
-
+  wg-easy:
     environment:
-      # PhotoStructure has _tons_ of settings. See
-      # <https://photostructure.com/faq/environment-variables/>
+      # Change Language:
+      # (Supports: en, ua, ru, tr, no, pl, fr, de, ca, es, ko, vi, nl, is, pt, chs, cht, it, th, hi, ja, si)
+      - LANG=en
+      # ⚠️ Required:
+      # Change this to your host's public address
+      - WG_HOST=racemiller.tplinkdns.com
 
-      # This tells PhotoStructure to only log errors, which is the default:
-      # - "PS_LOG_LEVEL=error"
-      
-      # If PhotoStructure is refusing to spin up, uncomment these lines to see what's going on:
-      # - "PS_LOG_LEVEL=info"
-      # - "PS_LOG_STDOUT=true"
-      
-      # This is your local timezone. See <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
-      - "TZ=${TZ}" # < CHANGE THIS LINE
-      
-      # The userid to run PhotoStructure as:
-      - "PUID=${PUID}" # < CHANGE THIS LINE or delete this line to run as root. See below for details.
-      
-      # The groupid to run PhotoStructure as:
-      - "PGID=${PGID}" # < CHANGE THIS LINE or delete this line to run as root.
+      # Optional:
+      # - PASSWORD_HASH=$$2y$$10$$hBCoykrB95WSzuV4fafBzOHWKu9sbyVa34GJr8VV5R/pIelfEMYyG # (needs double $$, hash of 'foobar123'; see "How_to_generate_an_bcrypt_hash.md" for generate the hash)
+      # - PORT=51821
+      # - WG_PORT=51820
+      # - WG_CONFIG_PORT=92820
+      # - WG_DEFAULT_ADDRESS=10.8.0.x
+      # - WG_DEFAULT_DNS=1.1.1.1
+      # - WG_MTU=1420
+      # - WG_ALLOWED_IPS=192.168.15.0/24, 10.0.1.0/24
+      # - WG_PERSISTENT_KEEPALIVE=25
+      # - WG_PRE_UP=echo "Pre Up" > /etc/wireguard/pre-up.txt
+      # - WG_POST_UP=echo "Post Up" > /etc/wireguard/post-up.txt
+      # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
+      # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
+      # - UI_TRAFFIC_STATS=true
+      # - UI_CHART_TYPE=0 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
+      # - WG_ENABLE_ONE_TIME_LINKS=true
+      # - UI_ENABLE_SORT_CLIENTS=true
+      # - WG_ENABLE_EXPIRES_TIME=true
+      # - ENABLE_PROMETHEUS_METRICS=false
+      # - PROMETHEUS_METRICS_PASSWORD=$$2a$$12$$vkvKpeEAHD78gasyawIod.1leBMKg8sBwKW.pQyNsq78bXV3INf2G # (needs double $$, hash of 'prometheus_password'; see "How_to_generate_an_bcrypt_hash.md" for generate the hash)
 
+    image: ghcr.io/wg-easy/wg-easy
+    container_name: wg-easy
+    volumes:
+      - etc_wireguard:/etc/wireguard
+    ports:
+      - 51823:51820/udp
+      - 51824:51821/tcp
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+      # - NET_RAW # ⚠️ Uncomment if using Podman
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
 
-    labels:
-      # See https://containrrr.dev/watchtower/container-selection/
-      - "com.centurylinklabs.watchtower.enable=true"
-
-#  watchtower:
-#    image: containrrr/watchtower
-#    volumes:
-#     - /var/run/docker.sock:/var/run/docker.sock
-#   # Check for updates every couple hours: (3h * 60m * 60s)
-#   command: --interval 10800
-#   environment:
-#      - "WATCHTOWER_LABEL_ENABLE=true"
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+   # Check for updates every couple hours: (3h * 60m * 60s)
+    command: --interval 10800
+    environment:
+      - TZ=${TZ}
+      - WATCHTOWER_CLEANUP=True
+      - WATCHTOWER_NOTIFICATIONS=gotify
+      - WATCHTOWER_NOTIFICATION_GOTIFY_URL=http://10.0.0.2:5454
+      - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
+      - WATCHTOWER_LABEL_ENABLE=False
+    # - WATCHTOWER_DISABLE_CONTAINERS=

@@ -69,3 +69,18 @@ services:
       - ${APPDATA}/jdownloader:/config:rw
       - ${DOWNLOADS}/Jdownloader:/output:rw
     restart: unless-stopped
+
+  gpodder:
+    image: xthursdayx/gpodder-docker
+    container_name: gPodder
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - PASSWORD= #optional
+    volumes:
+      - ${APPDATA}/gpodder:/config
+      - ${DOWNLOADS}/Podcasts:/downloads
+    ports:
+      - 3000:3000
+    restart: unless-stopped
