@@ -2,7 +2,7 @@
 - [ ] Set up repo layout
 - [ ] Add current server issues to "Issues"
 - [ ] Document current server setup (see notes below)
-- [ ] Upload docker-compose files
+- [x] Upload docker-compose files
 - [ ] Roadmap for future plans/ideas
 - [ ] Set up a way to commit/pull from GitHub
 
@@ -11,9 +11,10 @@
 - [ ] Document file/folder structure
 - [ ] Make a list of all packages to add to a fresh setup
 - [ ] Document OMV config for replication
+- [ ] Finish organizing containers into compose files
 - [ ] Clean up Portainer (stacks, networks, & volumes)
 
-## Issues (add to issues?)
+### Issues (add to issues?)
 - [ ] Restore wireguard config (originally stored in docker volume) - maybe use bind mount instead?
 - [ ] Filebrowser isn't accessible
 
