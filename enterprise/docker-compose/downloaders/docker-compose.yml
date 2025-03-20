@@ -129,7 +129,7 @@ services:
       - ${DATA}/YouTube:/youtube
       - ${APPDATA}/tubearchivist:/cache
     environment:
-      - ES_URL=http://192.168.80.2:9200   # needs protocol e.g. http and port # needs to reference the IP of the archivist-es container
+      - ES_URL=http://192.168.128.2:9200   # needs protocol e.g. http and port # needs to reference the IP of the archivist-es container
       - REDIS_CON=redis://archivist-redis:6379
       - HOST_UID=${PUID}
       - HOST_GID=${PGID}
