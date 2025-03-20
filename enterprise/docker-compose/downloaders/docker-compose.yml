@@ -118,7 +118,7 @@ services:
       - ${DOWNLOADS}/../Soulseek:/app/downloads
       - ${DATA}/Music/Regular Music:/music
     restart: unless-stopped
-    
+
   tubearchivist:
     container_name: tubearchivist
     restart: unless-stopped
@@ -161,6 +161,9 @@ services:
     image: bbilly1/tubearchivist-es         # only for amd64, or use official es 8.16.0
     container_name: archivist-es
     restart: unless-stopped
+    networks: 
+      default:
+        ipv4_address: 192.168.128.2
     environment:
       - "ELASTIC_PASSWORD=7508216"       # matching Elasticsearch password
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
@@ -178,3 +181,11 @@ services:
 
 volumes:
   es:
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 192.168.128.0/20
+         gateway: 192.168.128.1
