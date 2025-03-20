@@ -179,6 +179,15 @@ services:
     expose:
       - "9200"
 
+  sonarr_youtubedl:
+    image: whatdaybob/sonarr_youtubedl
+    container_name: sonarr-ytdl
+    volumes:
+      - ${APPDATA}/sonarr-youtubedl:/config
+      - ${DATA}:/sonarr_root
+      - ${APPDATA}/sonarr-youtubedl/logs:/logs
+    restart: unless-stopped
+
 volumes:
   es:
 
