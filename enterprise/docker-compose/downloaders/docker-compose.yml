@@ -72,7 +72,7 @@ services:
 
   gpodder:
     image: xthursdayx/gpodder-docker
-    container_name: gPodder
+    container_name: gpodder
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -84,6 +84,7 @@ services:
     ports:
       - 3000:3000
     restart: unless-stopped
+
   resilio-sync:
     image: lscr.io/linuxserver/resilio-sync:latest
     container_name: resilio-sync

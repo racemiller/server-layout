@@ -68,23 +68,34 @@ services:
   netdata:
     image: netdata/netdata:stable
     container_name: netdata
-    hostname: Enterprise # set to fqdn of host
-    ports:
-      - 1999:19999
+    pid: host
+    network_mode: host
+    hostname: enterprise
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
+      - SYS_ADMIN
     security_opt:
       - apparmor:unconfined
     volumes:
       - netdataconfig:/etc/netdata
       - netdatalib:/var/lib/netdata
       - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/dbus:/run/dbus:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=WZx2rmJrC8xF1Qytv4Gn62XB5qGSTErqJm2_IgvH8S4EDzYbeQCO5MlSUzk6JFUnQegNBhMd6Ll9SlILzXa3cXxPAekMII1lp9X-NWW3BPYwRxSbcbyc2HvHn97VdSjvYdWWxrw
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=d0b6f03e-1056-4ac4-a0bf-d21204f2f00e
+      - NETDATA_EXTRA_DEB_PACKAGES=apcupsd,lm-sensors
 
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
