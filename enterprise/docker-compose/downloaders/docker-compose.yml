@@ -191,8 +191,7 @@ services:
   soularr:
     image: mrusse08/soularr:latest
     container_name: soularr
-    networks:
-      - arr-stack
+
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -207,8 +206,6 @@ services:
   xmas-soularr:
     image: mrusse08/soularr:latest
     container_name: xmas-soularr
-    networks:
-      - arr-stack
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -219,7 +216,7 @@ services:
       - ${DOWNLOADS}/../Soulseek:/downloads
       - ${APPDATA}/xmas-soularr:/data
     restart: unless-stopped
-    
+
 volumes:
   es:
 
