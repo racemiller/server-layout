@@ -104,8 +104,6 @@ services:
   slskd:
     image: slskd/slskd
     container_name: slskd
-    networks:
-      - arr-stack
     ports:
       - 5030:5030
       - 5031:5031
@@ -121,7 +119,6 @@ services:
       - ${DATA}/Music/Regular Music:/music
     restart: unless-stopped
     
-
   tubearchivist:
     container_name: tubearchivist
     restart: unless-stopped
