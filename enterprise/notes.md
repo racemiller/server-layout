@@ -30,3 +30,5 @@ I have most of the Docker containers converted over to Docker compose, and once 
 ## Notes on configurations
 ### Home Assistant
 In order to access HA through reverse proxy, make sure the IP address of the 'nginx-reverse-proxy' container is added to the 'configuration.yaml' file for HA.
+### Sonarr-YouTubeDL
+There are a few issues with 'sonarr-ytdl' since the container image hasn't been updated in years. The main issue is that the latest image uses a very old version of yt-dlp, which is specified in the requirements.txt file. My current solution (not yet implemented) is to build a local copy of the docker image with a more up-to-date version of yt-dlp, with some kind of provisions to automatically update whenever the container is started. Then host this new container on GitHub so you can pull the image as needed.
