@@ -1,0 +1,13 @@
+services:
+  sonarr-ytdlp-test:
+    image: sonarr-ytdlp:latest
+    container_name: sonarr-ytdlp-test
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+    volumes:
+      - /srv/dev-disk-by-uuid-e3b35892-f917-465b-baa7-93962772ed9f/AppData/sonarr-ytdlp:/config
+      - /srv/04ea4e75-ca71-4eda-916c-6fad9221f3a2/Data:/sonarr_root
+      - /srv/dev-disk-by-uuid-e3b35892-f917-465b-baa7-93962772ed9f/AppData/sonarr-ytdlp/logs:/logs
+    restart: unless-stopped
