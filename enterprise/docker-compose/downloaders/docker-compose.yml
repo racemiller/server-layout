@@ -180,7 +180,7 @@ services:
       - "9200"
 
   sonarr_youtubedl:
-    image: whatdaybob/sonarr_youtubedl
+    image: sonarr-ytdlp:latest
     container_name: sonarr-ytdl
     volumes:
       - ${APPDATA}/sonarr-youtubedl:/config
