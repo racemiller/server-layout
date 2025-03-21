@@ -18,6 +18,7 @@
 - [x] Restore wireguard config (originally stored in docker volume) - maybe use bind mount instead?
 - [ ] Filebrowser isn't accessible
 - [ ] Netdata v1 isn't working
+- [ ] Maybe run soularr (or at least xmas soularr) manually? Like as a Python script instead of a Docker container. [soularr GitHub](https://github.com/mrusse/soularr/tree/main)
 
 ## Enterprise Brain Dump
 Right now I'm running OMV as the main OS, and this server is acting as a NAS as well as hosting almost all my Docker conatiners.  
