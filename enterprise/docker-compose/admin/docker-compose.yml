@@ -100,6 +100,9 @@ services:
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: nginx-proxy-manager
+    networks: 
+      default:
+        ipv4_address: 192.168.112.13
     restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
@@ -313,3 +316,11 @@ services:
       - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
       - WATCHTOWER_LABEL_ENABLE=False
     # - WATCHTOWER_DISABLE_CONTAINERS=
+    
+networks:
+  default:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 192.168.112.0/20
+         gateway: 192.168.112.1
