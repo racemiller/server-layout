@@ -84,7 +84,7 @@ services:
     ports:
       - 3000:3000
     restart: unless-stopped
-
+    
   podfetch:
     image: samuel19982/podfetch:latest
     container_name: podfetch
@@ -98,7 +98,7 @@ services:
       - POLLING_INTERVAL=60
       - SERVER_URL=http://localhost:8005
       - DATABASE_URL=sqlite:///app/db/podcast.db
-      
+
   resilio-sync:
     image: lscr.io/linuxserver/resilio-sync:latest
     container_name: resilio-sync
@@ -193,21 +193,26 @@ services:
     expose:
       - "9200"
 
-  sonarr_youtubedl:
-    image: sonarr-ytdlp:latest
-    container_name: sonarr-ytdl
-    labels:
-      - com.centurylinklabs.watchtower.enable=false
-    volumes:
-      - ${APPDATA}/sonarr-youtubedl:/config
-      - ${DATA}:/sonarr_root
-      - ${APPDATA}/sonarr-youtubedl/logs:/logs
-    restart: unless-stopped
+# Not using this for now because it has issues
+
+# sonarr_youtubedl:
+#   image: sonarr-ytdlp:latest
+#   container_name: sonarr-ytdl
+#   environment:
+#     - TZ=${TZ}
+#     - PUID=${PUID}
+#     - PGID=${PGID}
+#   labels:
+#     - com.centurylinklabs.watchtower.enable=false
+#   volumes:
+#     - ${APPDATA}/sonarr-youtubedl:/config
+#     - ${DATA}:/sonarr_root
+#     - ${APPDATA}/sonarr-youtubedl/logs:/logs
+#   restart: unless-stopped
 
   soularr:
     image: mrusse08/soularr:latest
     container_name: soularr
-
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -232,7 +237,7 @@ services:
       - ${DOWNLOADS}/Soulseek:/downloads
       - ${APPDATA}/xmas-soularr:/data
     restart: unless-stopped
-
+    
 volumes:
   es:
 
