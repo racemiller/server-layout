@@ -10,7 +10,7 @@ services:
     container_name: filebrowser
     user: "${PUID}:${PGID}"
     ports:
-      - 8080:80
+      - 8080:8080
     volumes:
       - ${DATA}/..:/data
       - ${APPDATA}/filebrowser:/config
@@ -42,10 +42,10 @@ services:
       - TZ=${TZ}
     volumes:
       - ${APPDATA}/home-assistant:/config
-    ports:
-      - 8123:8123 #optional
+#   ports:
+#     - 8123:8123 #don't need if running in host network mode
    #devices:
-    # - /path/to/device:/path/to/device #optional
+    # - /run/dbus:/run/dbus #optional
     restart: unless-stopped
 
   navidrome:
@@ -99,11 +99,12 @@ services:
 
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
-    container_name: nginx-proxy-manager
+    container_name: npm
+    hostname: npm
+    restart: unless-stopped
     networks: 
       default:
         ipv4_address: 192.168.112.13
-    restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
       - 80:80 # Public HTTP Port
@@ -126,8 +127,42 @@ services:
       - ${APPDATA}/nginx-proxy/letsencrypt:/etc/letsencrypt
       - /etc/ssl:/etc/ssl
 
+  nextcloud:
+    image: linuxserver/nextcloud
+    container_name: nextcloud
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APPDATA}/nextcloud:/config
+      - ${DATA}/../Nextcloud:/data
+    ports:
+      - ${PORT}:443
+    restart: unless-stopped
+    depends_on:
+      - nextcloud_db
+  nextcloud_db:
+    image: linuxserver/mariadb
+    container_name: nextcloud_db
+    hostname: nextcloud_db
+#   networks: 
+#     default:
+#       ipv4_address: 192.168.112.3    
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=${TZ}
+      - MYSQL_DATABASE=nextcloud_db
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - ${APPDATA}/nextcloud/DB:/config
+    restart: unless-stopped
+    
   organizr:
-    image: organizr/organizr
+    image: organizr/organizr:latest
     container_name: organizr
     hostname: organizr
     environment:
@@ -316,7 +351,7 @@ services:
       - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
       - WATCHTOWER_LABEL_ENABLE=False
     # - WATCHTOWER_DISABLE_CONTAINERS=
-    
+
 networks:
   default:
     driver: bridge
