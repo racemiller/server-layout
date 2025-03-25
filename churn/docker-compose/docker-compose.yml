@@ -1,0 +1,91 @@
+ services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    environment:
+      - TZ=America/Denver
+      - WATCHTOWER_CLEANUP=True
+      - WATCHTOWER_NOTIFICATIONS=gotify
+      - WATCHTOWER_NOTIFICATION_GOTIFY_URL=http://10.0.0.2:5454
+      - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
+      - WATCHTOWER_NOTIFICATIONS_LEVEL=warn
+      - WATCHTOWER_NOTIFICATIONS_HOSTNAME=Churn
+      - WATCHTOWER_LABEL_ENABLE=False
+    # - WATCHTOWER_DISABLE_CONTAINERS=
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+#  netdata:
+#    image: netdata/netdata
+#    container_name: netdata
+#    pid: host
+#    network_mode: host
+#    restart: unless-stopped
+#    cap_add:
+#      - SYS_PTRACE
+#      - SYS_ADMIN
+#    security_opt:
+#      - apparmor:unconfined
+#    volumes:
+#      - netdataconfig:/etc/netdata
+#      - netdatalib:/var/lib/netdata
+#      - netdatacache:/var/cache/netdata
+#      - /:/host/root:ro,rslave
+#      - /etc/passwd:/host/etc/passwd:ro
+#      - /etc/group:/host/etc/group:ro
+#      - /etc/localtime:/etc/localtime:ro
+#      - /proc:/host/proc:ro
+#      - /sys:/host/sys:ro
+#      - /etc/os-release:/host/etc/os-release:ro
+#      - /var/log:/host/var/log:ro
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      - /run/dbus:/run/dbus:ro
+
+  wg-easy:
+    environment:
+    #  Optional:
+    #  - PORT=51821
+    #  - HOST=0.0.0.0
+    #  - INSECURE=false
+      - WG_HOST=racemiller.tplinkdns.com
+
+    image: ghcr.io/wg-easy/wg-easy
+    container_name: wg-easy
+    networks:
+      wg:
+        ipv4_address: 10.42.42.42
+        ipv6_address: fdcc:ad94:bacf:61a3::2a
+    volumes:
+      - etc_wireguard:/etc/wireguard
+      - /lib/modules:/lib/modules:ro
+    ports:
+      - "51820:51820/udp"
+      - "51821:51821/tcp"
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+      # - NET_RAW # ⚠️ Uncomment if using Podman Compose
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.default.forwarding=1
+
+ networks:
+  wg:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.42.42.0/24
+        - subnet: fdcc:ad94:bacf:61a3::/64
+
+ volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
+  etc_wireguard:

@@ -1,0 +1,87 @@
+name: main
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+      - VERSION=docker
+      - PLEX_CLAIM= LTycXhyVA41QrWWhcMp_
+    volumes:
+      - /home/plex/config:/config
+      - /srv/c4bb966e-1a80-4707-a170-aa5002251c31:/media
+    restart: unless-stopped
+
+  netdata:
+    image: netdata/netdata:stable
+    container_name: netdata
+    pid: host
+    network_mode: host
+    hostname: plexflix
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/dbus:/run/dbus:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=WZx2rmJrC8xF1Qytv4Gn62XB5qGSTErqJm2_IgvH8S4EDzYbeQCO5MlSUzk6JFUnQegNBhMd6Ll9SlILzXa3cXxPAekMII1lp9X-NWW3BPYwRxSbcbyc2HvHn97VdSjvYdWWxrw
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=d0b6f03e-1056-4ac4-a0bf-d21204f2f00e
+      - NETDATA_EXTRA_DEB_PACKAGES=apcupsd,lm-sensors
+
+  immich-machine-learning:
+    container_name: immich_machine_learning
+    # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
+    # Example tag: ${IMMICH_VERSION:-release}-cuda
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    # extends:
+    #   file: hwaccel.ml.yml
+    #   service: # set to one of [armnn, cuda, openvino, openvino-wsl] for accelerated inference - use the `-wsl` version for WSL2 where applicable
+    volumes:
+      - /home/race/immich/:/cache
+    restart: always
+    ports:
+      - 3003:3003
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+   # Check for updates every 3 hours: (3h * 60m * 60s)
+   # command: --interval 10800
+    environment:
+      - TZ=Amercia/Denver
+      - WATCHTOWER_CLEANUP=True
+      - WATCHTOWER_NOTIFICATIONS=gotify
+      - WATCHTOWER_NOTIFICATION_GOTIFY_URL=http://10.0.0.2:5454
+      - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
+      - WATCHTOWER_NOTIFICATIONS_LEVEL=warn
+      - WATCHTOWER_NOTIFICATIONS_HOSTNAME=Plexflix
+      - WATCHTOWER_LABEL_ENABLE=False
+    # - WATCHTOWER_DISABLE_CONTAINERS=
+
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
