@@ -129,7 +129,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${APPDATA}/slskd:/app
-      - ${DOWNLOADS}/../Soulseek:/app/downloads
+      - ${DOWNLOADS}/Soulseek:/app/downloads
       - ${DATA}/Music/Regular Music:/music
     restart: unless-stopped
 
