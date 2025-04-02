@@ -38,3 +38,6 @@ I pulled the latest version from GitHub [sonarr_youtubedl](https://github.com/wh
 Currently disabling this container in the docker-compose file because of ongoing issues. It performed its duty and helped me find some episodes and I don't think I need it constantly running right now anyway. Might be another good one to do a one-off run once in a while, but right now it's more work than it's worth.
 ### Docker Hostnames
 If you add the "hostname:" value to your compose file, you can reference that container by its hostname from another container on the same network. Look at the nextcloud & nextcloud_db containers for example. This makes it so you don't need to worry about setting static IPs for containers that need to reference each other.
+### TubeArchivist Plex Watch State
+Currently using this Tautulli notification plugin to sync videos watched on Plex to TubeArchivist: [Tautulli Notify TubeArchivist of Plex Watched State
+](https://github.com/tangyjoust/Tautulli-Notify-TubeArchivist-of-Plex-Watched-State/tree/main)
