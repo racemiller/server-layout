@@ -32,6 +32,14 @@ services:
     # sudo chown -R 1234:1234 ./gotify_data
     # user: "1234:1234"
     
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8020:8080
+
   homeassistant:
     image: lscr.io/linuxserver/homeassistant:latest
     container_name: homeassistant
@@ -336,19 +344,32 @@ services:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
 
+  watchstate:
+    image: ghcr.io/arabcoders/watchstate:latest
+        # To change the user/group id associated with the tool change the following line.
+    user: "${UID:-1000}:${GID:-1000}"
+    container_name: watchstate
+    restart: unless-stopped
+    ports:
+      - "8112:8080" # The port which will serve WebUI + API + Webhooks
+    volumes:
+      - ${APPDATA}/watchstate:/config:rw # mount current directory to container /config directory.
+
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
-   # Check for updates every couple hours: (3h * 60m * 60s)
-    command: --interval 10800
+   # Check for updates every 3 hours: (3h * 60m * 60s)
+   # command: --interval 10800
     environment:
       - TZ=${TZ}
       - WATCHTOWER_CLEANUP=True
       - WATCHTOWER_NOTIFICATIONS=gotify
       - WATCHTOWER_NOTIFICATION_GOTIFY_URL=http://10.0.0.2:5454
       - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=AC6Tg5B5UuSbDm0
+      - WATCHTOWER_NOTIFICATIONS_LEVEL=warn
+      - WATCHTOWER_NOTIFICATIONS_HOSTNAME=Enterprise
       - WATCHTOWER_LABEL_ENABLE=False
     # - WATCHTOWER_DISABLE_CONTAINERS=
 

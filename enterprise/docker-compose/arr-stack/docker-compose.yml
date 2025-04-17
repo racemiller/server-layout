@@ -197,5 +197,91 @@
       - 6767:6767
     restart: unless-stopped
 
+  huntarr-sonarr:
+    image: huntarr/4sonarr:latest
+    container_name: huntarr-sonarr
+    restart: unless-stopped
+    networks:
+      - arr-stack
+    ports:
+      - 8988:8988
+    volumes:
+      - ${APPDATA}/huntarr-sonarr:/config
+    environment:
+      API_KEY: 999660b68c014e988c13d361348810d8
+      API_URL: http://10.0.0.2:8989
+      API_TIMEOUT: 60
+      MONITORED_ONLY: true
+      HUNT_MISSING_SHOWS: 1
+      HUNT_UPGRADE_EPISODES: 0
+      SLEEP_DURATION: 900
+      STATE_RESET_INTERVAL_HOURS: 168
+      DEBUG_MODE: false
+      ENABLE_WEB_UI: true
+      SKIP_FUTURE_EPISODES: true
+      SKIP_SERIES_REFRESH: false
+      COMMAND_WAIT_DELAY: 1
+      COMMAND_WAIT_ATTEMPTS: 600
+      MINIMUM_DOWNLOAD_QUEUE_SIZE: -1
+      RANDOM_MISSING: true
+      RANDOM_UPGRADES: true
+
+  huntarr-lidarr:
+    image: huntarr/4lidarr:2.0
+    container_name: huntarr-lidarr
+    restart: unless-stopped
+    networks:
+      - arr-stack
+    environment:
+      API_KEY: 9936906c812c465db0300e7965767ced
+      API_URL: http://10.0.0.2:8686
+      HUNT_MISSING_MODE: album
+      HUNT_MISSING_ITEMS: 1
+      HUNT_UPGRADE_ALBUMS: 1
+      SLEEP_DURATION: 900
+      RANDOM_SELECTION: true
+      MONITORED_ONLY: true
+      STATE_RESET_INTERVAL_HOURS: 168
+      DEBUG_MODE: false
+
+  huntarr-radarr:
+    image: huntarr/4radarr:latest
+    container_name: huntarr-radarr
+    restart: unless-stopped
+    networks:
+      - arr-stack
+    environment:
+      API_KEY: e138a165dd234dcb86d324131b1c0d5e
+      API_URL: http://10.0.0.2:7878
+      API_TIMEOUT: 60
+      MONITORED_ONLY: true
+      SKIP_FUTURE_RELEASES: true
+      HUNT_MISSING_MOVIES: 1
+      HUNT_UPGRADE_MOVIES: 0
+      SLEEP_DURATION: 900
+      RANDOM_SELECTION: true
+      STATE_RESET_INTERVAL_HOURS: 168
+      DEBUG_MODE: false
+
+  huntarr-readarr:
+    image: huntarr/4readarr:latest
+    container_name: huntarr-readarr
+    restart: unless-stopped
+    networks:
+      - arr-stack
+    environment:
+      API_KEY: 7eb82755fe3f4fa3bce9ed0d2e1b81d9
+      API_URL: http://10.0.0.2:8787
+      API_TIMEOUT: 60
+      MONITORED_ONLY: true
+      SKIP_FUTURE_RELEASES: true
+      HUNT_MISSING_BOOKS: 1
+      HUNT_UPGRADE_BOOKS: 0
+      SLEEP_DURATION: 900
+      RANDOM_SELECTION: true
+      REFRESH_AUTHOR: true
+      STATE_RESET_INTERVAL_HOURS: 168
+      DEBUG_MODE: false
+
  networks:
   arr-stack:
