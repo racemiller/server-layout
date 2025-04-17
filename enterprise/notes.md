@@ -5,7 +5,8 @@
 - [x] Upload docker-compose files
 - [ ] Roadmap for future plans/ideas
 - [ ] Set up a way to commit/pull from GitHub
-- [ ] Self hosted TV channels
+- [x] Self hosted TV channels
+- [x] Self hosted Radio stations
 
 # Notes
 ## Current setup To-Do
@@ -20,7 +21,7 @@
 - [x] Filebrowser isn't accessible
 - [ ] Netdata v1 isn't working
 - [ ] Maybe run soularr (or at least xmas soularr) manually? Like as a Python script instead of a Docker container. [soularr GitHub](https://github.com/mrusse/soularr/tree/main)
-- [ ] Move Nextcloud to admin stack (ensure static IP for database & update config)
+- [x] Move Nextcloud to admin stack (ensure static IP for database & update config)
 
 ## Enterprise Brain Dump
 Right now I'm running OMV as the main OS, and this server is acting as a NAS as well as hosting almost all my Docker conatiners.  
