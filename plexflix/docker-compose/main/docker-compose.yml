@@ -81,6 +81,22 @@ services:
       - WATCHTOWER_LABEL_ENABLE=False
     # - WATCHTOWER_DISABLE_CONTAINERS=
 
+  ersatztv:
+    image: jasongdove/ersatztv:latest-vaapi
+    container_name: ersatztv
+    environment:
+     - TZ=America/Denver
+     - PUID=1000
+     - PGID=1000
+    ports:
+     - 8409:8409
+    volumes:
+     - /home/ersatztv:/root/.local/share/ersatztv
+     - /srv/c4bb966e-1a80-4707-a170-aa5002251c31:/media:ro
+    devices:
+     - /dev/dri:/dev/dri
+    restart: unless-stopped
+
 volumes:
   netdataconfig:
   netdatalib:

@@ -1,0 +1,88 @@
+name: azuracast
+services:
+    web:
+        container_name: azuracast
+        image: 'ghcr.io/azuracast/azuracast:${AZURACAST_VERSION:-latest}'
+        labels:
+            - com.centurylinklabs.watchtower.scope=azuracast
+        ports:
+            - '${AZURACAST_HTTP_PORT:-80}:${AZURACAST_HTTP_PORT:-80}'
+            - '${AZURACAST_HTTPS_PORT:-443}:${AZURACAST_HTTPS_PORT:-443}'
+            - '${AZURACAST_SFTP_PORT:-2022}:${AZURACAST_SFTP_PORT:-2022}'
+            - '8000:8000'
+            - '8005:8005'
+            - '8006:8006'
+            - '8010:8010'
+            - '8015:8015'
+            - '8016:8016'
+            - '8020:8020'
+            - '8025:8025'
+            - '8026:8026'
+            - '8030:8030'
+            - '8035:8035'
+            - '8036:8036'
+            - '8040:8040'
+            - '8045:8045'
+            - '8046:8046'
+            - '8050:8050'
+            - '8055:8055'
+            - '8056:8056'
+            - '8060:8060'
+            - '8065:8065'
+            - '8066:8066'
+            - '8070:8070'
+            - '8075:8075'
+            - '8076:8076'
+            - '8090:8090'
+            - '8095:8095'
+            - '8096:8096'
+        env_file:
+            - azuracast.env
+            - .env
+        volumes:
+ #           - 'station_data:/var/azuracast/stations'
+            - /home/race/azuracast/stations/:/var/azuracast/stations
+            - 'backups:/var/azuracast/backups'
+            - 'db_data:/var/lib/mysql'
+            - 'www_uploads:/var/azuracast/storage/uploads'
+            - 'shoutcast2_install:/var/azuracast/storage/shoutcast2'
+            - 'stereo_tool_install:/var/azuracast/storage/stereo_tool'
+            - 'rsas_install:/var/azuracast/storage/rsas'
+            - 'geolite_install:/var/azuracast/storage/geoip'
+            - 'sftpgo_data:/var/azuracast/storage/sftpgo'
+            - 'acme:/var/azuracast/storage/acme'
+        restart: unless-stopped
+        ulimits:
+            nofile:
+                soft: 65536
+                hard: 65536
+        logging:
+            driver: json-file
+            options:
+                max-size: 1m
+                max-file: '5'
+        environment:
+            NGINX_RADIO_PORTS: (8000|8010|8020|8030|8040|8050|8060|8070|8090)
+            NGINX_WEBDJ_PORTS: (8005|8015|8025|8035|8045|8055|8065|8075|8095)
+    updater:
+        container_name: azuracast_updater
+        image: 'ghcr.io/azuracast/updater:latest'
+        restart: unless-stopped
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock'
+        logging:
+            driver: json-file
+            options:
+                max-size: 1m
+                max-file: '5'
+volumes:
+    db_data: {  }
+    acme: {  }
+    shoutcast2_install: {  }
+    stereo_tool_install: {  }
+    rsas_install: {  }
+    geolite_install: {  }
+    sftpgo_data: {  }
+#    station_data: {  }
+    www_uploads: {  }
+    backups: {  }
