@@ -15,6 +15,7 @@
 - [ ] Document OMV config for replication
 - [ ] Finish organizing containers into compose files
 - [ ] Clean up Portainer (stacks, networks, & volumes)
+- [ ] Set up Git to handle local versioning & updating of GitHub repo
 
 ### Issues (add to issues?)
 - [x] Restore wireguard config (originally stored in docker volume) - maybe use bind mount instead?
