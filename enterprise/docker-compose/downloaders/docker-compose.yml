@@ -143,7 +143,7 @@ services:
       - ${DATA}/YouTube:/youtube
       - ${APPDATA}/tubearchivist:/cache
     environment:
-      - ES_URL=http://192.168.128.2:9200   # needs protocol e.g. http and port # needs to reference the IP of the archivist-es container
+      - ES_URL=http://archivist-es:9200   # needs protocol e.g. http and port # needs to reference the IP of the archivist-es container
       - REDIS_CON=redis://archivist-redis:6379
       - HOST_UID=${PUID}
       - HOST_GID=${PGID}
@@ -175,9 +175,10 @@ services:
     image: bbilly1/tubearchivist-es         # only for amd64, or use official es 8.16.0
     container_name: archivist-es
     restart: unless-stopped
-    networks: 
-      default:
-        ipv4_address: 192.168.128.2
+    hostname: archivist-es
+#    networks:
+#     default:
+#        ipv4_address: 192.168.128.2
     environment:
       - "ELASTIC_PASSWORD=7508216"       # matching Elasticsearch password
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
