@@ -267,6 +267,7 @@ services:
     volumes:
       - ${APPDATA}/syncthing:/config
       - ${DATA}:/data1
+      - ${BACKUPS}:/pop-os
       #- /path/to/data2:/data2
     ports:
       - 8384:8384
