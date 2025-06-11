@@ -43,3 +43,10 @@ If you add the "hostname:" value to your compose file, you can reference that co
 ### TubeArchivist Plex Watch State
 Currently using this Tautulli notification plugin to sync videos watched on Plex to TubeArchivist: [Tautulli Notify TubeArchivist of Plex Watched State
 ](https://github.com/tangyjoust/Tautulli-Notify-TubeArchivist-of-Plex-Watched-State/tree/main)
+### TubeArchivist Plex Integration
+This is what syncs videos in TubeArchivist to your Plex server. You're using this script: [tubearchivist-plex](https://github.com/tubearchivist/tubearchivist-plex)
+If you notice YT videos not showing up on Plex, check the above repo for an update. To update: Download the zip file from the repo, or click [here](https://github.com/tubearchivist/tubearchivist-plex/archive/refs/heads/main.zip). Cd into the Plex config folder and wget the zip file to there, then unzip it. 
+Move the 'Scanners/Series/TubeArchivist Series Scanner.py' file to the same location within the Plex config folder (replacing the old one).
+Move the 'Contents' folder to the 'Plug-ins/TubeArchivist-Agent.bundle' folder, replacing the old one.
+Restart Plex.
+You can also check the above repo link for more instructions/directions/troubleshooting.
