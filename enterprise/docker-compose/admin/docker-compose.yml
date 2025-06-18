@@ -5,73 +5,73 @@ volumes:
   etc_wireguard:
 
 services:
-  filebrowser:
-    image: hurlenko/filebrowser
-    container_name: filebrowser
-    user: "${PUID}:${PGID}"
-    ports:
-      - 8080:8080
-    volumes:
-      - ${DATA}/..:/data
-      - ${APPDATA}/filebrowser:/config
-    environment:
-      - FB_BASEURL=/filebrowser
-    restart: unless-stopped
+#  filebrowser:
+#    image: hurlenko/filebrowser
+#    container_name: filebrowser
+#    user: "${PUID}:${PGID}"
+#    ports:
+#      - 8080:8080
+#    volumes:
+#       - ${DATA}/..:/data
+#       - ${APPDATA}/filebrowser:/config
+#     environment:
+#       - FB_BASEURL=/filebrowser
+#     restart: unless-stopped
     
-  gotify:
-    image: gotify/server
-    container_name: gotify
-    ports:
-      - 5454:80
-    environment:
-      - GOTIFY_DEFAULTUSER_PASS=admin
-      - TZ=${TZ}
-    volumes:
-      - ${APPDATA}/gotify:/app/data
-    # to run gotify as a dedicated user:
-    # sudo chown -R 1234:1234 ./gotify_data
-    # user: "1234:1234"
+#   gotify:
+#     image: gotify/server
+#     container_name: gotify
+#     ports:
+#       - 5454:80
+#     environment:
+#       - GOTIFY_DEFAULTUSER_PASS=admin
+#       - TZ=${TZ}
+#     volumes:
+#       - ${APPDATA}/gotify:/app/data
+#     # to run gotify as a dedicated user:
+#     # sudo chown -R 1234:1234 ./gotify_data
+#     # user: "1234:1234"
     
-  dozzle:
-    container_name: dozzle
-    image: amir20/dozzle:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 8020:8080
+#   dozzle:
+#     container_name: dozzle
+#     image: amir20/dozzle:latest
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock
+#     ports:
+#       - 8020:8080
 
-  homeassistant:
-    image: lscr.io/linuxserver/homeassistant:latest
-    container_name: homeassistant
-    network_mode: host
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${APPDATA}/home-assistant:/config
-#   ports:
-#     - 8123:8123 #don't need if running in host network mode
-   #devices:
-    # - /run/dbus:/run/dbus #optional
-    restart: unless-stopped
+#   homeassistant:
+#     image: lscr.io/linuxserver/homeassistant:latest
+#     container_name: homeassistant
+#     network_mode: host
+#     environment:
+#       - PUID=${PUID}
+#       - PGID=${PGID}
+#       - TZ=${TZ}
+#     volumes:
+#       - ${APPDATA}/home-assistant:/config
+# #   ports:
+# #     - 8123:8123 #don't need if running in host network mode
+#    #devices:
+#     # - /run/dbus:/run/dbus #optional
+#     restart: unless-stopped
 
-  navidrome:
-    image: deluan/navidrome:latest
-    container_name: navidrome
-    user: ${PUID}:${PGID} # should be owner of volumes
-    ports:
-      - 4533:4533
-    restart: unless-stopped
-    environment:
-      # Optional: put your config options customization here. Examples:
-      ND_SCANSCHEDULE: 1h
-      ND_LOGLEVEL: info  
-      ND_SESSIONTIMEOUT: 24h
-      ND_BASEURL: ""
-    volumes:
-      - ${APPDATA}/navidrome:/data
-      - ${DATA}/Music/Regular Music:/music:ro
+#   navidrome:
+#     image: deluan/navidrome:latest
+#     container_name: navidrome
+#     user: ${PUID}:${PGID} # should be owner of volumes
+#     ports:
+#       - 4533:4533
+#     restart: unless-stopped
+#     environment:
+#       # Optional: put your config options customization here. Examples:
+#       ND_SCANSCHEDULE: 1h
+#       ND_LOGLEVEL: info  
+#       ND_SESSIONTIMEOUT: 24h
+#       ND_BASEURL: ""
+#     volumes:
+#       - ${APPDATA}/navidrome:/data
+#       - ${DATA}/Music/Regular Music:/music:ro
 
   netdata:
     image: netdata/netdata:stable
@@ -135,87 +135,87 @@ services:
       - ${APPDATA}/nginx-proxy/letsencrypt:/etc/letsencrypt
       - /etc/ssl:/etc/ssl
 
-  nextcloud:
-    image: linuxserver/nextcloud
-    container_name: nextcloud
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${APPDATA}/nextcloud:/config
-      - ${DATA}/../Nextcloud:/data
-    ports:
-      - ${PORT}:443
-    restart: unless-stopped
-    depends_on:
-      - nextcloud_db
-  nextcloud_db:
-    image: linuxserver/mariadb
-    container_name: nextcloud_db
-    hostname: nextcloud_db
-#   networks: 
-#     default:
-#       ipv4_address: 192.168.112.3    
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - TZ=${TZ}
-      - MYSQL_DATABASE=nextcloud_db
-      - MYSQL_USER=nextcloud
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
-    volumes:
-      - ${APPDATA}/nextcloud/DB:/config
-    restart: unless-stopped
+#   nextcloud:
+#     image: linuxserver/nextcloud
+#     container_name: nextcloud
+#     environment:
+#       - PUID=${PUID}
+#       - PGID=${PGID}
+#       - TZ=${TZ}
+#     volumes:
+#       - ${APPDATA}/nextcloud:/config
+#       - ${DATA}/../Nextcloud:/data
+#     ports:
+#       - ${PORT}:443
+#     restart: unless-stopped
+#     depends_on:
+#       - nextcloud_db
+#   nextcloud_db:
+#     image: linuxserver/mariadb
+#     container_name: nextcloud_db
+#     hostname: nextcloud_db
+# #   networks: 
+# #     default:
+# #       ipv4_address: 192.168.112.3    
+#     environment:
+#       - PUID=${PUID}
+#       - PGID=${PGID}
+#       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+#       - TZ=${TZ}
+#       - MYSQL_DATABASE=nextcloud_db
+#       - MYSQL_USER=nextcloud
+#       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+#     volumes:
+#       - ${APPDATA}/nextcloud/DB:/config
+#     restart: unless-stopped
     
-  organizr:
-    image: organizr/organizr:latest
-    container_name: organizr
-    hostname: organizr
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${APPDATA}/organizr:/config
-    ports:
-      - 100:80
-    restart: unless-stopped
+#   organizr:
+#     image: organizr/organizr:latest
+#     container_name: organizr
+#     hostname: organizr
+#     environment:
+#       - PUID=${PUID}
+#       - PGID=${PGID}
+#       - TZ=${TZ}
+#     volumes:
+#       - ${APPDATA}/organizr:/config
+#     ports:
+#       - 100:80
+#     restart: unless-stopped
 
-  overseerr:
-    image: sctx/overseerr:latest
-    container_name: overseerr
-    environment:
-      - LOG_LEVEL=debug
-      - TZ=${TZ}
-    ports:
-      - 5055:5055
-    volumes:
-      - ${APPDATA}/overseerr:/app/config
-    restart: unless-stopped
+#   overseerr:
+#     image: sctx/overseerr:latest
+#     container_name: overseerr
+#     environment:
+#       - LOG_LEVEL=debug
+#       - TZ=${TZ}
+#     ports:
+#       - 5055:5055
+#     volumes:
+#       - ${APPDATA}/overseerr:/app/config
+#     restart: unless-stopped
 
-  tautulli:
-    image: lscr.io/linuxserver/tautulli:latest
-    container_name: tautulli
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${APPDATA}/tautulli:/config
-    ports:
-      - 8181:8181
-    restart: unless-stopped
+#   tautulli:
+#     image: lscr.io/linuxserver/tautulli:latest
+#     container_name: tautulli
+#     environment:
+#       - PUID=${PUID}
+#       - PGID=${PGID}
+#       - TZ=${TZ}
+#     volumes:
+#       - ${APPDATA}/tautulli:/config
+#     ports:
+#       - 8181:8181
+#     restart: unless-stopped
 
-  wrapperr:
-    ports:
-      - 8383:8282
-    container_name: wrapperr
-    image: ghcr.io/aunefyren/wrapperr:latest
-    restart: unless-stopped
-    volumes:
-      - ${APPDATA}/wrapper:/app/config
+#   wrapperr:
+#     ports:
+#       - 8383:8282
+#     container_name: wrapperr
+#     image: ghcr.io/aunefyren/wrapperr:latest
+#     restart: unless-stopped
+#     volumes:
+#       - ${APPDATA}/wrapper:/app/config
 
   smokeping:
     image: lscr.io/linuxserver/smokeping:latest
@@ -276,27 +276,27 @@ services:
       - 21027:21027/udp
     restart: unless-stopped
  
-  playlistSync:
-    image: rnagabhyrava/plexplaylistsync:latest
-    container_name: playlistsync
-    # optional only if you chose WRITE_MISSING_AS_CSV=1 in env
-    volumes:
-      - ${DATA}/Music:/data
-    environment:
-      - PLEX_URL=http://10.0.0.10:32400
-      - PLEX_TOKEN=LTycXhyVA41QrWWhcMp_
-      - WRITE_MISSING_AS_CSV=1 # Default 0, 1 = writes missing tracks from each playlist to a csv
-      - APPEND_SERVICE_SUFFIX=0 # Default 1, 1 = appends the service name to the playlist name
-      - ADD_PLAYLIST_POSTER=1 # Default 1, 1 = add poster for each playlist
-      - ADD_PLAYLIST_DESCRIPTION=1 # Default 1, 1 = add description for each playlist
-      - APPEND_INSTEAD_OF_SYNC=0 # Default 0, 1 = Sync tracks, 0 = Append only
-      - SECONDS_TO_WAIT=84000
-      - SPOTIFY_CLIENT_ID=6c27b67bc3d048a98a34817495c7ad98
-      - SPOTIFY_CLIENT_SECRET=84ff2c0102f74741a5c43f8f04fdba9e
-      - SPOTIFY_USER_ID=22xuhoj5orno5ngbe65hfcjpy
-      - DEEZER_USER_ID=<your spotify user id>
-      - DEEZER_PLAYLIST_ID= #<deezer playlist ids space seperated>
-    restart: unless-stopped
+  # playlistSync:
+  #   image: rnagabhyrava/plexplaylistsync:latest
+  #   container_name: playlistsync
+  #   # optional only if you chose WRITE_MISSING_AS_CSV=1 in env
+  #   volumes:
+  #     - ${DATA}/Music:/data
+  #   environment:
+  #     - PLEX_URL=http://10.0.0.10:32400
+  #     - PLEX_TOKEN=LTycXhyVA41QrWWhcMp_
+  #     - WRITE_MISSING_AS_CSV=1 # Default 0, 1 = writes missing tracks from each playlist to a csv
+  #     - APPEND_SERVICE_SUFFIX=0 # Default 1, 1 = appends the service name to the playlist name
+  #     - ADD_PLAYLIST_POSTER=1 # Default 1, 1 = add poster for each playlist
+  #     - ADD_PLAYLIST_DESCRIPTION=1 # Default 1, 1 = add description for each playlist
+  #     - APPEND_INSTEAD_OF_SYNC=0 # Default 0, 1 = Sync tracks, 0 = Append only
+  #     - SECONDS_TO_WAIT=84000
+  #     - SPOTIFY_CLIENT_ID=6c27b67bc3d048a98a34817495c7ad98
+  #     - SPOTIFY_CLIENT_SECRET=84ff2c0102f74741a5c43f8f04fdba9e
+  #     - SPOTIFY_USER_ID=22xuhoj5orno5ngbe65hfcjpy
+  #     - DEEZER_USER_ID=<your spotify user id>
+  #     - DEEZER_PLAYLIST_ID= #<deezer playlist ids space seperated>
+  #   restart: unless-stopped
 
   wg-easy:
     environment:
@@ -345,16 +345,16 @@ services:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
 
-  watchstate:
-    image: ghcr.io/arabcoders/watchstate:latest
-        # To change the user/group id associated with the tool change the following line.
-    user: "${UID:-1000}:${GID:-1000}"
-    container_name: watchstate
-    restart: unless-stopped
-    ports:
-      - "8112:8080" # The port which will serve WebUI + API + Webhooks
-    volumes:
-      - ${APPDATA}/watchstate:/config:rw # mount current directory to container /config directory.
+  # watchstate:
+  #   image: ghcr.io/arabcoders/watchstate:latest
+  #       # To change the user/group id associated with the tool change the following line.
+  #   user: "${UID:-1000}:${GID:-1000}"
+  #   container_name: watchstate
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8112:8080" # The port which will serve WebUI + API + Webhooks
+  #   volumes:
+  #     - ${APPDATA}/watchstate:/config:rw # mount current directory to container /config directory.
 
   watchtower:
     image: containrrr/watchtower
