@@ -110,9 +110,9 @@ services:
     container_name: npm
     hostname: npm
     restart: unless-stopped
-    networks: 
-      default:
-        ipv4_address: 192.168.112.13
+#    networks: 
+#      default:
+#        ipv4_address: 192.168.112.13
     ports:
       # These ports are in format <host-port>:<container-port>
       - 80:80 # Public HTTP Port
