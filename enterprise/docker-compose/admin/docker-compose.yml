@@ -5,18 +5,18 @@ volumes:
   etc_wireguard:
 
 services:
-#  filebrowser:
-#    image: hurlenko/filebrowser
-#    container_name: filebrowser
-#    user: "${PUID}:${PGID}"
-#    ports:
-#      - 8080:8080
-#    volumes:
-#       - ${DATA}/..:/data
-#       - ${APPDATA}/filebrowser:/config
-#     environment:
-#       - FB_BASEURL=/filebrowser
-#     restart: unless-stopped
+ filebrowser:
+   image: hurlenko/filebrowser
+   container_name: filebrowser
+   user: "${PUID}:${PGID}"
+   ports:
+     - 8080:8080
+   volumes:
+      - ${DATA}/..:/data
+      - ${APPDATA}/filebrowser:/config
+   environment:
+      - FB_BASEURL=/filebrowser
+   restart: unless-stopped
     
 #   gotify:
 #     image: gotify/server
