@@ -50,3 +50,5 @@ Move the 'Scanners/Series/TubeArchivist Series Scanner.py' file to the same loca
 Move the 'Contents' folder to the 'Plug-ins/TubeArchivist-Agent.bundle' folder, replacing the old one.
 Restart Plex.
 You can also check the above repo link for more instructions/directions/troubleshooting.
+### Readarr
+Readarr was retired on 6/27/25. Using [rreading-glasses](https://github.com/blampe/rreading-glasses) as a crutch for now. May need to switch to [LazyLibrarian](https://lazylibrarian.gitlab.io/) in the future. Also looking into [Calibre](https://calibre-ebook.com/) & [Calibre-web](https://github.com/janeczku/calibre-web) as a frontend for ebooks.
