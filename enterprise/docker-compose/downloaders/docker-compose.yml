@@ -13,6 +13,9 @@ services:
             - SERVER_COUNTRIES=Netherlands
         ports:
             - 8001:8000/tcp
+            - 6379:6379/tcp
+            - 9200:9200/tcp
+            
   transmission-openvpn:
         container_name: transmission
         cap_add:
@@ -180,8 +183,8 @@ services:
     image: redis
     container_name: archivist-redis
     restart: unless-stopped
-    expose:
-      - "6379"
+  #  expose:
+  #    - "6379"
     volumes:
       - ${APPDATA}/tubearchivist/redis:/data
     depends_on:
@@ -206,8 +209,8 @@ services:
         hard: -1
     volumes:
       - es:/usr/share/elasticsearch/data    # check for permission error when using bind mount, see readme
-    expose:
-      - "9200"
+ #   expose:
+ #     - "9200"
 
 # Not using this for now because it has issues
 
