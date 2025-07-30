@@ -1,21 +1,21 @@
 services:
   gluetun:
-        image: qmcgaw/gluetun
-        container_name: gluetun
-        cap_add:
-            - NET_ADMIN
-        devices:
-            - /dev/net/tun:/dev/net/tun
-        environment:
-            - VPN_SERVICE_PROVIDER=nordvpn
-            - VPN_TYPE=openvpn # or wireguard
-            - OPENVPN_USER=ANjcTRAkd2sx5tRbssYzFcuH
-            - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
-            - SERVER_COUNTRIES=Netherlands
-        ports:
-            - 8001:8000/tcp
-            - 6379:6379/tcp
-            - 9200:9200/tcp
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=openvpn # or wireguard
+      - OPENVPN_USER=ANjcTRAkd2sx5tRbssYzFcuH
+      - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
+      - SERVER_COUNTRIES=Netherlands
+    ports:
+      - 8001:8000/tcp
+      # - 6379:6379/tcp
+      # - 9200:9200/tcp
             
   transmission-openvpn:
         container_name: transmission
@@ -184,8 +184,9 @@ services:
     image: redis
     container_name: archivist-redis
     restart: unless-stopped
-  #  expose:
-  #    - "6379"
+    network_mode: service:gluetun
+    expose:
+      - "6379"
     volumes:
       - ${APPDATA}/tubearchivist/redis:/data
     depends_on:
@@ -194,6 +195,7 @@ services:
     image: bbilly1/tubearchivist-es         # only for amd64, or use official es 8.16.0
     container_name: archivist-es
     restart: unless-stopped
+    network_mode: service:gluetun
     hostname: archivist-es
 #    networks:
 #     default:
@@ -210,8 +212,8 @@ services:
         hard: -1
     volumes:
       - es:/usr/share/elasticsearch/data    # check for permission error when using bind mount, see readme
- #   expose:
- #     - "9200"
+    expose:
+      - "9200"
 
 # Not using this for now because it has issues
 
