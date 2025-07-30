@@ -1,6 +1,7 @@
 services:
   gluetun:
         image: qmcgaw/gluetun
+        container_name: gluetun
         cap_add:
             - NET_ADMIN
         devices:
@@ -13,6 +14,7 @@ services:
             - SERVER_COUNTRIES=Netherlands
         ports:
             - 8001:8000/tcp
+
   transmission-openvpn:
         container_name: transmission
         cap_add:
@@ -151,9 +153,9 @@ services:
     container_name: tubearchivist
     restart: unless-stopped
     image: bbilly1/tubearchivist
-    network_mode: "service:gluetun"
-   # ports:
-   #   - 8001:8000
+    network_mode: service:gluetun
+#    ports:
+#      - 8001:8000
     volumes:
       - ${DATA}/YouTube:/youtube
       - ${APPDATA}/tubearchivist:/cache
