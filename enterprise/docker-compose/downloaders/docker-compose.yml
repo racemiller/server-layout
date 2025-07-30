@@ -1,16 +1,16 @@
 services:
   gluetun:
-  image: qmcgaw/gluetun
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    environment:
-      - VPN_SERVICE_PROVIDER=nordvpn
-      - VPN_TYPE=openvpn # or wireguard
-      - OPENVPN_USER=ANjcTRAkd2sx5tRbssYzFcuH
-      - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
-      - SERVER_COUNTRIES=Netherlands
+        image: qmcgaw/gluetun
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - /dev/net/tun:/dev/net/tun
+        environment:
+            - VPN_SERVICE_PROVIDER=nordvpn
+            - VPN_TYPE=openvpn # or wireguard
+            - OPENVPN_USER=ANjcTRAkd2sx5tRbssYzFcuH
+            - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
+            - SERVER_COUNTRIES=Netherlands
   transmission-openvpn:
         container_name: transmission
         cap_add:
