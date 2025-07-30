@@ -14,13 +14,9 @@ services:
             - SERVER_COUNTRIES=Netherlands
         ports:
             - 8001:8000/tcp
-<<<<<<< HEAD
-
-=======
             - 6379:6379/tcp
             - 9200:9200/tcp
             
->>>>>>> c7aadc3b65c678bb2e94ba8c72f568f386d72079
   transmission-openvpn:
         container_name: transmission
         cap_add:
