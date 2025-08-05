@@ -32,11 +32,13 @@ services:
 #     # sudo chown -R 1234:1234 ./gotify_data
 #     # user: "1234:1234"
     
-  dozzle:
+  dozzle-agent:
     container_name: dozzle-agent
     image: amir20/dozzle:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOZZLE_HOSTNAME=Enterprise
     ports:
       - 7007:7007
     command: agent
@@ -382,4 +384,5 @@ networks:
      config:
        - subnet: 192.168.112.0/20
          gateway: 192.168.112.1
+
 
