@@ -12,8 +12,8 @@ services:
       - OPENVPN_USER=ANjcTRAkd2sx5tRbssYzFcuH
       - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
       - SERVER_COUNTRIES=Netherlands
-    ports:
-      - 8001:8000/tcp
+#    ports:
+      # - 8001:8000/tcp
       # - 6379:6379/tcp
       # - 9200:9200/tcp
             
@@ -155,9 +155,9 @@ services:
     container_name: tubearchivist
     restart: unless-stopped
     image: bbilly1/tubearchivist
-    network_mode: service:gluetun
-#    ports:
-#      - 8001:8000
+   # network_mode: service:gluetun
+    ports:
+      - 8001:8000
     volumes:
       - ${DATA}/YouTube:/youtube
       - ${APPDATA}/tubearchivist:/cache
@@ -184,7 +184,7 @@ services:
     image: redis
     container_name: archivist-redis
     restart: unless-stopped
-    network_mode: service:gluetun
+#    network_mode: service:gluetun
     expose:
       - "6379"
     volumes:
@@ -195,7 +195,7 @@ services:
     image: bbilly1/tubearchivist-es         # only for amd64, or use official es 8.16.0
     container_name: archivist-es
     restart: unless-stopped
-    network_mode: service:gluetun
+#    network_mode: service:gluetun
     hostname: archivist-es
 #    networks:
 #     default:
