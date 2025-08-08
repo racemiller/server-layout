@@ -12,10 +12,19 @@ services:
       - OPENVPN_USER=ANjcTRAkd2sx5tRbssYzFcuH
       - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
       - SERVER_COUNTRIES=Netherlands
-#    ports:
-      # - 8001:8000/tcp
-      # - 6379:6379/tcp
-      # - 9200:9200/tcp
+      - TZ=${TZ}
+    ports:
+      - 5030:5030 # slskd
+      - 5031:5031 # slskd
+      - 50300:50300 # slskd
+      - 5800:5800 # jdownloader
+      - 3129:3129 # jdownloader
+      - 3000:3000 # gpodder
+      - 8889:8888 # resilio
+      - 55555:55555 # resilio
+      - 8050:8050 # tubearchivist
+      - 9200:9200 # tubearchivist
+      - 6379:6379 # tubearchivist
             
   transmission-openvpn:
         container_name: transmission
@@ -79,10 +88,11 @@ services:
 
   jdownloader-2:
     image: jlesage/jdownloader-2
-    container_name: jdownloader
-    ports:
-      - 5800:5800
-      - 3129:3129
+    container_name: jdownloader.
+    network_mode: "service:gluetun"
+    # ports:
+    #   - 5800:5800
+    #   - 3129:3129
     volumes:
       - ${APPDATA}/jdownloader:/config:rw
       - ${DOWNLOADS}/Jdownloader:/output:rw
@@ -91,6 +101,7 @@ services:
   gpodder:
     image: xthursdayx/gpodder-docker
     container_name: gpodder
+    network_mode: "service:gluetun"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -99,8 +110,8 @@ services:
     volumes:
       - ${APPDATA}/gpodder:/config
       - ${DOWNLOADS}/Podcasts:/downloads
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
     restart: unless-stopped
     
   podfetch:
@@ -120,6 +131,7 @@ services:
   resilio-sync:
     image: lscr.io/linuxserver/resilio-sync:latest
     container_name: resilio-sync
+    network_mode: "service:gluetun"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -128,18 +140,19 @@ services:
       - ${APPDATA}/resilio:/config
       - ${DOWNLOADS}/Torrents/completed:/downloads
       - ${DATA}/Fan Edits:/sync
-    ports:
-      - 8889:8888
-      - 55555:55555
+    # ports:
+    #   - 8889:8888
+    #   - 55555:55555
     restart: unless-stopped
 
   slskd:
     image: slskd/slskd
     container_name: slskd
-    ports:
-      - 5030:5030
-      - 5031:5031
-      - 50300:50300
+    # ports:
+    #   - 5030:5030
+    #   - 5031:5031
+    #   - 50300:50300
+    network_mode: "service:gluetun"
     environment:
       - SLSKD_REMOTE_CONFIGURATION=true
       - PUID=${PUID}
@@ -155,24 +168,25 @@ services:
     container_name: tubearchivist
     restart: unless-stopped
     image: bbilly1/tubearchivist
-   # network_mode: service:gluetun
-    ports:
-      - 8001:8000
+    network_mode: service:gluetun
+    # ports:
+    #   - 8001:8000
     volumes:
       - ${DATA}/YouTube:/youtube
       - ${APPDATA}/tubearchivist:/cache
     environment:
-      - ES_URL=http://archivist-es:9200   # needs protocol e.g. http and port # needs to reference the IP of the archivist-es container
-      - REDIS_CON=redis://archivist-redis:6379
+      - ES_URL=http://localhost:9200   # needs protocol e.g. http and port # needs to reference the IP of the archivist-es container
+      - REDIS_CON=redis://localhost:6379
       - HOST_UID=${PUID}
       - HOST_GID=${PGID}
-      - TA_HOST=http://10.0.0.2/24 https://tube.racemiller.com         # set your host name
+      - TA_HOST=http://10.0.0.2/24 https://tube.racemiller.com http://localhost:8001         # set your host name
+      - TA_PORT=8050
       - TA_USERNAME=racemiller           # your initial TA credentials
       - TA_PASSWORD=7508216              # your initial TA credentials
       - ELASTIC_PASSWORD=7508216         # set password for Elasticsearch
       - TZ=${TZ}                 # set your time zone
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8050/api/health"]
       interval: 2m
       timeout: 10s
       retries: 3
@@ -184,9 +198,9 @@ services:
     image: redis
     container_name: archivist-redis
     restart: unless-stopped
-#    network_mode: service:gluetun
-    expose:
-      - "6379"
+    network_mode: service:gluetun
+    # expose:
+    #   - "6379"
     volumes:
       - ${APPDATA}/tubearchivist/redis:/data
     depends_on:
@@ -195,8 +209,8 @@ services:
     image: bbilly1/tubearchivist-es         # only for amd64, or use official es 8.16.0
     container_name: archivist-es
     restart: unless-stopped
-#    network_mode: service:gluetun
-    hostname: archivist-es
+    network_mode: service:gluetun
+    # hostname: archivist-es
 #    networks:
 #     default:
 #        ipv4_address: 192.168.128.2
@@ -212,8 +226,8 @@ services:
         hard: -1
     volumes:
       - es:/usr/share/elasticsearch/data    # check for permission error when using bind mount, see readme
-    expose:
-      - "9200"
+    # expose:
+    #   - "9200"
 
 # Not using this for now because it has issues
 
