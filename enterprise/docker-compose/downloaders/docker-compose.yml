@@ -6,13 +6,16 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ${APPDATA}/gluetun:/gluetun
     environment:
       - VPN_SERVICE_PROVIDER=nordvpn
       - VPN_TYPE=openvpn # or wireguard
       - OPENVPN_USER=ANjcTRAkd2sx5tRbssYzFcuH
       - OPENVPN_PASSWORD=QhTZa4VLtswTHNb262GD93ie
-      - SERVER_COUNTRIES=Netherlands
+      # - SERVER_COUNTRIES=Netherlands
       - TZ=${TZ}
+      - STORAGE_FILEPATH=/gluetun/servers.json
     ports:
       - 5030:5030 # slskd
       - 5031:5031 # slskd
