@@ -112,7 +112,7 @@ services:
       - PASSWORD= #optional
     volumes:
       - ${APPDATA}/gpodder:/config
-      - ${DOWNLOADS}/Podcasts:/downloads
+      - ${DATA}/Podcasts:/downloads
     # ports:
     #   - 3000:3000
     restart: unless-stopped
@@ -175,7 +175,7 @@ services:
     # ports:
     #   - 8001:8000
     volumes:
-      - ${DATA}/YouTube:/youtube
+      - ${DATA}/Shows/YouTube:/youtube
       - ${APPDATA}/tubearchivist:/cache
     environment:
       - ES_URL=http://localhost:9200   # needs protocol e.g. http and port # needs to reference the IP of the archivist-es container
@@ -188,6 +188,7 @@ services:
       - TA_PASSWORD=7508216              # your initial TA credentials
       - ELASTIC_PASSWORD=7508216         # set password for Elasticsearch
       - TZ=${TZ}                 # set your time zone
+      - TA_AUTO_UPDATE_YTDLP=release
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8050/api/health"]
       interval: 2m
