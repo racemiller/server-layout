@@ -17,7 +17,7 @@ services:
     environment:
       - FB_BASEURL=/filebrowser
     restart: unless-stopped
-    
+
 #   gotify:
 #     image: gotify/server
 #     container_name: gotify
@@ -31,7 +31,7 @@ services:
 #     # to run gotify as a dedicated user:
 #     # sudo chown -R 1234:1234 ./gotify_data
 #     # user: "1234:1234"
-    
+
   # dozzle-agent:
   #   container_name: dozzle-agent
   #   image: amir20/dozzle:latest
@@ -380,7 +380,7 @@ services:
     restart: unless-stopped
 
   watchtower:
-    image: containrrr/watchtower
+    image: ghcr.io/nicholas-fedor/watchtower:latest
     container_name: watchtower
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
