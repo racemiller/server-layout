@@ -396,6 +396,7 @@ services:
       - WATCHTOWER_NOTIFICATIONS_HOSTNAME=Enterprise
       - WATCHTOWER_LABEL_ENABLE=False
     # - WATCHTOWER_DISABLE_CONTAINERS=
+    restart: unless-stopped
 
 networks:
   default:
