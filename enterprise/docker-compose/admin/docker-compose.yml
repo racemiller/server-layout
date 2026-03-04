@@ -15,7 +15,7 @@ services:
       - ${DATA}/..:/data
       - ${APPDATA}/filebrowser:/config
     environment:
-      - FB_BASEURL=/filebrowser
+      - FB_BASE_URL=/filebrowser
     restart: unless-stopped
 
 #   gotify:
